@@ -50,7 +50,6 @@
       "cacheVariables": { "PICO_BOARD": "pico2_w" }
     },
 
-    /* ---- presets finales (los que sí usas) ---- */
     {
       "name": "pico-release",
       "displayName": "Pico Release",

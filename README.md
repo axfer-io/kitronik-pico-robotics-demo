@@ -1,106 +1,105 @@
-# Pico C/C++ Firmware Template
+# Pico C/C++ Firmware Template --- Kitronik Robotics (I2C PCA9685)
 
-Embedded systems · Control · Debugging ⚙️  
+Embedded systems · Control · Debugging ⚙️\
 I/O 🔌, firmware 🔧, and systems that actually run 🚀
 
----
+------------------------------------------------------------------------
 
 ## Overview
 
-This repository provides a **clean, reproducible template** for embedded firmware projects using the Raspberry Pi Pico SDK.
+This example demonstrates control of:
 
-It is designed for:
-- low-level C/C++ development
-- deterministic builds
-- on-target debugging
-- minimal magic
+-   Servos
+-   DC motors
+-   Stepper motors
 
----
+using the **Kitronik Robotics board with PCA9685 PWM controller** over
+I2C.
 
-## Requirements
+The RP2040 communicates via I2C to a dedicated PWM driver.
 
-- Raspberry Pi Pico SDK (`PICO_SDK_PATH` exported)
-- CMake ≥ 3.13
-- Ninja
-- ARM GCC toolchain
-- `pico-tools` installed at `~/pico/tools` (for flashing & OpenOCD)
+------------------------------------------------------------------------
 
+## Example Code
 
-## Supported Targets
+``` cpp
+#include "pico/stdlib.h"
+#include "kitronik_pico_robotics.hpp"
 
-- RP2040 (Pico / Pico W)
-- RP2350 (Pico 2 / Pico 2 W)
+int main() {
+    stdio_init_all();
+    sleep_ms(200);
 
----
+    KitronikPicoRobotics board(i2c0, 0x6C, 8, 9, 100000);
 
-## Features
+    while (true) {
 
-- Out-of-tree builds
-- CMake presets (Debug / Release)
-- OpenOCD flash target
-- SWD debugging ready
-- Modular source / lib structure
+        // Servo control
+        board.servoWrite(1, 0);
+        sleep_ms(500);
 
----
+        board.servoWrite(1, 180);
+        sleep_ms(500);
 
-## Project Structure
+        // Motor control
+        board.motorOn(1, 'f', 60);
+        sleep_ms(500);
 
-```text
-.
-├── src/            # Application code
-├── lib/            # Drivers / utilities
-├── build/          # Generated build directories
-├── CMakeLists.txt
-├── CMakePresets.json
-└── README.md
+        board.motorOff(1);
+        sleep_ms(500);
+
+        // Stepper control
+        board.step(1, 'f', 100, 20, false);
+        sleep_ms(1000);
+    }
+}
 ```
 
----
+------------------------------------------------------------------------
 
-## Build Flow
+## Hardware Architecture
 
-Presets define the board and build type.  
-You configure once, then live in `cmake --build`.
+Control method:
 
-### First-time configure
-```bash
-cmake --preset pico2w-debug
+  Device          Method
+  --------------- ---------
+  Servos          PCA9685
+  Motors          PCA9685
+  Steppers        PCA9685
+  Communication   I2C
+
+------------------------------------------------------------------------
+
+## I2C Wiring
+
+  Signal    Pico Pin
+  --------- ----------
+  SDA       GP8
+  SCL       GP9
+  Address   0x6C
+
+------------------------------------------------------------------------
+
+## Build and Flash
+
+``` bash
+cmake --preset pico2-release
+cmake --build --preset build-pico2-release
+picotool load build/pico2-release/app.uf2 -f
+picotool reboot
 ```
 
-### Incremental build
-```bash
-cmake --build --preset build-pico2w-debug
-```
+------------------------------------------------------------------------
 
-### Build + flash
-```bash
-cmake --build --preset flash-pico2w-debug
-```
+## When to use this version
 
----
+Use this firmware when:
 
-## Debugging
+-   Hardware includes PCA9685
+-   Robotics board communicates over I2C
+-   Multiple servos/motors must be controlled efficiently
 
-1. Start OpenOCD
-2. Attach GDB / DAP
-3. Set breakpoints and inspect registers / memory
-
-OpenOCD is expected to run on port `:3333` (SWD).
-
-Designed to work cleanly with:
-- gdb-multiarch
-- Neovim + nvim-dap
-
----
-
-## Design Principles
-
-- Explicit control over convenience
-- Debug-first mindset
-- Hardware-driven design
-- Minimal abstractions
-
----
+------------------------------------------------------------------------
 
 ## Author
 
@@ -108,7 +107,7 @@ Designed to work cleanly with:
 Embedded systems · Control · Debugging  
 Firmware and systems that actually run.
 
----
+------------------------------------------------------------------------
 
 ## License
 

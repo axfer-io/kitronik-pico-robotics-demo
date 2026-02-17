@@ -16,11 +16,13 @@ add_executable(${FW_NAME})
 add_subdirectory(src)
 add_subdirectory(lib/drivers)
 add_subdirectory(lib/utils)
+add_subdirectory(lib/kitronik_robotics)
 
 target_link_libraries(${FW_NAME}
     pico_stdlib
     drivers
     utils
+    kitronik_robotics
 )
 
 pico_enable_stdio_usb(${FW_NAME} 1)
