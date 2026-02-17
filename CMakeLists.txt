@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
+include(FetchContent)
 
 # Nombre lógico del firmware (portable)
 set(FW_NAME "app" CACHE STRING "Firmware name")
@@ -19,7 +20,7 @@ add_subdirectory(lib/utils)
 
 FetchContent_Declare(
     kitronik_pico_robotics
-    GIT_REPOSITORY git@github.com:axfer-io/kitronik-pico-robotics.git
+    GIT_REPOSITORY https://github.com/axfer-io/kitronik-pico-robotics.git
     GIT_TAG main
 )
 
