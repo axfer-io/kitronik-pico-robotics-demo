@@ -16,13 +16,20 @@ add_executable(${FW_NAME})
 add_subdirectory(src)
 add_subdirectory(lib/drivers)
 add_subdirectory(lib/utils)
-add_subdirectory(lib/kitronik_robotics)
+
+FetchContent_Declare(
+    kitronik_pico_robotics
+    GIT_REPOSITORY git@github.com:axfer-io/kitronik-pico-robotics.git
+    GIT_TAG main
+)
+
+FetchContent_MakeAvailable(kitronik_pico_robotics)
 
 target_link_libraries(${FW_NAME}
     pico_stdlib
     drivers
     utils
-    kitronik_robotics
+    kitronik_pico_robotics
 )
 
 pico_enable_stdio_usb(${FW_NAME} 1)
