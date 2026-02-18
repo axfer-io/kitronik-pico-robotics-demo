@@ -28,7 +28,7 @@ int main() {
         board.servoWrite(2, 0);
         sleep_ms(1000);
         board.servoWrite(1, 180);
-        board.servoWrite(2, 180)
+        board.servoWrite(2, 180);
         sleep_ms(1000);
     
 
@@ -52,14 +52,14 @@ int main() {
         // =========================
 
         // Stepper 1 forward, 100 pasos
-        board.step(1, 'f', 100, 20, false);
+        board.step(2, 'f', 100, 20, false);
         sleep_ms(500);
         // Stepper 1 reverse, 100 pasos
-        board.step(1, 'r', 100, 20, false);
+        board.step(2, 'r', 100, 20, false);
         sleep_ms(500);
 
         // También puedes usar ángulo:
-        board.stepAngle(1, 'f', 90.0f, 20, false, 200);
+        board.stepAngle(2, 'f', 90.0f, 20, false, 200);
         sleep_ms(1000);
     }
 }
