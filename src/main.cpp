@@ -6,7 +6,7 @@ int main() {
     sleep_ms(200);
 
     // Inicializa la board I2C PCA9685
-    // i2c0, dirección 0x6C (108), SDA=8, SCL=9, 100kHz
+    // i2c0, dirección 0x6C (108), SDA=8, SCL=9, 100kHzz
     KitronikPicoRobotics board(i2c0, 0x6C, 8, 9, 100000);
     
     
