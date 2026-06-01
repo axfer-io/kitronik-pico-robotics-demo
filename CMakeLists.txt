@@ -20,7 +20,7 @@ include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 include(FetchContent)
 
 # Nombre lógico del firmware (portable)
-set(FW_NAME "app" CACHE STRING "Firmware name")
+get_filename_component(FW_NAME ${CMAKE_SOURCE_DIR} NAME CACHE STRING "Firmware name")
 
 project(${FW_NAME} C CXX ASM)
 set(CMAKE_C_STANDARD 11)
@@ -30,9 +30,9 @@ pico_sdk_init()
 
 add_executable(${FW_NAME})
 
-add_subdirectory(src)
 add_subdirectory(lib/drivers)
 add_subdirectory(lib/utils)
+add_subdirectory(src)
 
 FetchContent_Declare(
     kitronik_pico_robotics
@@ -42,7 +42,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(kitronik_pico_robotics)
 
-target_link_libraries(${FW_NAME}
+target_link_libraries(${FW_NAME} PRIVATE
     pico_stdlib
     drivers
     utils
